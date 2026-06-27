@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 
 	"ginforge/internal/architecture"
+	"ginforge/internal/config"
 )
 
 func GenerateProject(
@@ -46,6 +47,21 @@ func GenerateProject(
 		); err != nil {
 			return err
 		}
+	}
+	cfg := &config.GinForgeConfig{
+		Architecture: arch.Name(),
+		Version:      1,
+	}
+
+	err := config.Save(
+		filepath.Join(
+			projectPath,
+			".ginforge.yaml",
+		),
+		cfg,
+	)
+	if err != nil {
+		return err
 	}
 
 	return nil

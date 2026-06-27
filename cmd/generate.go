@@ -18,14 +18,10 @@ var moduleCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		moduleName := args[0]
-
-		arch, err := architecture.Get(
-			architectureType,
-		)
+		arch, err := architecture.ResolveFromProject(".")
 		if err != nil {
 			return err
 		}
-
 		return generator.GenerateModule(
 			".",
 			moduleName,
