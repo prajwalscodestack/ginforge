@@ -173,7 +173,7 @@ func validateImports(
 			violations = append(
 				violations,
 				fmt.Sprintf(
-					"%s : %s layer must not import %s layer",
+					"\n%s\n    %s layer must not import %s layer",
 					filePath,
 					layer,
 					importedLayer,

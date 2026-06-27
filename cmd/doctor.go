@@ -22,11 +22,14 @@ var doctorCmd = &cobra.Command{
 		fmt.Println("GinForge Doctor")
 		fmt.Println()
 
-		hasFailures := false
+		passed := 0
+		failed := 0
 
 		for _, result := range results {
 
 			if result.Passed {
+
+				passed++
 
 				fmt.Printf(
 					"✓ %s\n",
@@ -35,13 +38,15 @@ var doctorCmd = &cobra.Command{
 
 			} else {
 
-				hasFailures = true
+				failed++
 
 				fmt.Printf(
 					"✗ %s\n",
 					result.Name,
 				)
 			}
+
+			fmt.Println()
 
 			for _, message := range result.Messages {
 
@@ -54,14 +59,18 @@ var doctorCmd = &cobra.Command{
 			fmt.Println()
 		}
 
-		if hasFailures {
+		fmt.Println("Summary")
+		fmt.Println("-------")
 
-			fmt.Println(
-				"Doctor found issues.",
-			)
+		fmt.Printf(
+			"Passed: %d\n",
+			passed,
+		)
 
-			return nil
-		}
+		fmt.Printf(
+			"Failed: %d\n",
+			failed,
+		)
 
 		return nil
 	},
