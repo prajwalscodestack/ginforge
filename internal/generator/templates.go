@@ -12,6 +12,7 @@ var templateFS embed.FS
 type ProjectTemplateData struct {
 	ProjectName  string
 	Architecture string
+	ModuleName   string
 }
 
 func RenderTemplate(

@@ -20,10 +20,14 @@ func (l Layered) Directories() []string {
 	}
 }
 
-func (l Layered) GenerateProject(path string) error {
-	return CreateDirectories(path, l.Directories())
+func (l Layered) ProjectTemplates() []TemplateFile {
+	return []TemplateFile{
+		{
+			Template: "templates/layered/main.go.tmpl",
+			Output:   "cmd/server/main.go",
+		},
+	}
 }
-
 func (l Layered) GenerateModule(projectPath, moduleName string) error {
 	return nil
 }

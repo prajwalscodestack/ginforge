@@ -11,53 +11,37 @@ func GenerateProject(
 	arch architecture.Architecture,
 ) error {
 
-	if err := arch.GenerateProject(projectPath); err != nil {
+	// create folders
+	if err := architecture.CreateDirectories(
+		projectPath,
+		arch.Directories(),
+	); err != nil {
 		return err
 	}
 
 	data := ProjectTemplateData{
 		ProjectName:  filepath.Base(projectPath),
 		Architecture: arch.Name(),
+		ModuleName:   filepath.Base(projectPath),
 	}
 
-	files := []struct {
-		Template string
-		Output   string
-	}{
-		{
-			"templates/main.go.tmpl",
-			filepath.Join(
-				projectPath,
-				"cmd/server/main.go",
-			),
-		},
-		{
-			"templates/readme.md.tmpl",
-			filepath.Join(
-				projectPath,
-				"README.md",
-			),
-		},
-		{
-			"templates/gitignore.tmpl",
-			filepath.Join(
-				projectPath,
-				".gitignore",
-			),
-		},
-		{
-			"templates/config.yaml.tmpl",
-			filepath.Join(
-				projectPath,
-				"configs/config.yaml",
-			),
-		},
-	}
+	// architecture templates
+	for _, file := range arch.ProjectTemplates() {
 
-	for _, f := range files {
 		if err := RenderTemplate(
-			f.Template,
-			f.Output,
+			file.Template,
+			filepath.Join(projectPath, file.Output),
+			data,
+		); err != nil {
+			return err
+		}
+	}
+	// generate shared templates
+	for _, file := range SharedTemplates() {
+
+		if err := RenderTemplate(
+			file.Template,
+			filepath.Join(projectPath, file.Output),
 			data,
 		); err != nil {
 			return err
@@ -65,4 +49,24 @@ func GenerateProject(
 	}
 
 	return nil
+}
+func SharedTemplates() []architecture.TemplateFile {
+	return []architecture.TemplateFile{
+		{
+			Template: "templates/shared/readme.md.tmpl",
+			Output:   "README.md",
+		},
+		{
+			Template: "templates/shared/gitignore.tmpl",
+			Output:   ".gitignore",
+		},
+		{
+			Template: "templates/shared/config.yaml.tmpl",
+			Output:   "configs/config.yaml",
+		},
+		{
+			Template: "templates/shared/gomod.tmpl",
+			Output:   "go.mod",
+		},
+	}
 }

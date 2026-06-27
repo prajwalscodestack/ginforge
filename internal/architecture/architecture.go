@@ -5,7 +5,10 @@ type Architecture interface {
 
 	Directories() []string
 
-	GenerateProject(path string) error
+	ProjectTemplates() []TemplateFile
 
-	GenerateModule(projectPath, moduleName string) error
+	GenerateModule(
+		projectPath,
+		moduleName string,
+	) error
 }

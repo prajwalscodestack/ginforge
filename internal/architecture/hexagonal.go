@@ -25,11 +25,14 @@ func (h Hexagonal) Directories() []string {
 		"pkg",
 	}
 }
-
-func (h Hexagonal) GenerateProject(path string) error {
-	return CreateDirectories(path, h.Directories())
+func (h Hexagonal) ProjectTemplates() []TemplateFile {
+	return []TemplateFile{
+		{
+			Template: "templates/hexagonal/main.go.tmpl",
+			Output:   "cmd/server/main.go",
+		},
+	}
 }
-
 func (h Hexagonal) GenerateModule(projectPath, moduleName string) error {
 	return nil
 }
