@@ -11,12 +11,23 @@ func Run(projectPath string) []Result {
 
 	var results []Result
 
+	var hasFailure bool
+
 	for _, check := range checks {
-		results = append(
-			results,
-			check.Run(projectPath),
-		)
+
+		result := check.Run(projectPath)
+
+		results = append(results, result)
+
+		if !result.Passed {
+			hasFailure = true
+		}
 	}
+
+	// ---------------------------------------
+	// OPTIONAL: future CI hook readiness
+	// ---------------------------------------
+	_ = hasFailure
 
 	return results
 }

@@ -2,11 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/prajwalscodestack/ginforge/internal/doctor"
 
 	"github.com/spf13/cobra"
 )
+
+var strict bool
 
 var doctorCmd = &cobra.Command{
 	Use:   "doctor",
@@ -31,29 +34,19 @@ var doctorCmd = &cobra.Command{
 
 				passed++
 
-				fmt.Printf(
-					"✓ %s\n",
-					result.Name,
-				)
+				fmt.Printf("✓ %s\n", result.Name)
 
 			} else {
 
 				failed++
 
-				fmt.Printf(
-					"✗ %s\n",
-					result.Name,
-				)
+				fmt.Printf("✗ %s\n", result.Name)
 			}
 
 			fmt.Println()
 
 			for _, message := range result.Messages {
-
-				fmt.Printf(
-					"  %s\n",
-					message,
-				)
+				fmt.Printf("  %s\n", message)
 			}
 
 			fmt.Println()
@@ -62,20 +55,31 @@ var doctorCmd = &cobra.Command{
 		fmt.Println("Summary")
 		fmt.Println("-------")
 
-		fmt.Printf(
-			"Passed: %d\n",
-			passed,
-		)
+		fmt.Printf("Passed: %d\n", passed)
+		fmt.Printf("Failed: %d\n", failed)
 
-		fmt.Printf(
-			"Failed: %d\n",
-			failed,
-		)
+		// -------------------------
+		// STRICT MODE (CI SUPPORT)
+		// -------------------------
+		if strict && failed > 0 {
+			fmt.Println()
+			fmt.Println("❌ Doctor failed (strict mode enabled)")
+			os.Exit(1)
+		}
 
 		return nil
 	},
 }
 
 func init() {
+
+	doctorCmd.Flags().
+		BoolVar(
+			&strict,
+			"strict",
+			false,
+			"Exit with error code if issues found",
+		)
+
 	rootCmd.AddCommand(doctorCmd)
 }

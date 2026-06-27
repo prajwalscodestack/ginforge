@@ -6,31 +6,34 @@ Instead of manually creating project structures, modules, and architectural boil
 
 ---
 
-## Features
+## 🚀 Features
 
-### Project Scaffolding
+### ⚡ Project Scaffolding
 
-Generate production-ready Gin projects using popular architecture patterns.
+Generate production-ready Gin projects using popular architecture patterns with interactive support.
 
 ```bash
 ginforge new myapp --architecture layered
-```
-
-```bash
 ginforge new myapp --architecture hexagonal
+ginforge new
 ```
 
-### Module Generation
+---
 
-Generate modules with architecture-specific boilerplate.
+### 🧩 Module Generation
+
+Generate modules with architecture-aware boilerplate inside existing projects.
 
 ```bash
 ginforge generate module user
+ginforge generate module
 ```
 
-### Route Discovery
+---
 
-Analyze Gin applications and discover routes automatically using Go AST.
+### 🔍 Route Discovery
+
+Analyze Gin applications and discover routes automatically using Go AST parsing.
 
 ```bash
 ginforge routes
@@ -38,15 +41,17 @@ ginforge routes
 
 Supports:
 
-* Route groups
-* Nested route groups
-* Named handlers
-* Method handlers
-* Inline handlers
+- Route groups
+- Nested route groups
+- Named handlers
+- Method handlers
+- Inline handlers
 
-### Route Export
+---
 
-Export discovered routes in multiple formats.
+### 📤 Route Export
+
+Export discovered routes in multiple formats for debugging and documentation.
 
 ```bash
 ginforge routes --json
@@ -54,29 +59,32 @@ ginforge routes --csv
 ginforge routes --md
 ```
 
-### Architecture Validation
+---
 
-Validate project structure and architecture rules.
+### 🧪 Architecture Validation (Doctor)
+
+Validate project structure, architecture rules, and detect issues in your Gin project.
 
 ```bash
 ginforge doctor
+ginforge doctor --strict
 ```
 
 Checks include:
 
-* Architecture detection
-* Structure validation
-* Duplicate route detection
-* Layered architecture dependency validation
-* Hexagonal architecture dependency validation
+- Architecture detection
+- Structure validation
+- Duplicate route detection (with file-level details)
+- Layered architecture dependency validation
+- Hexagonal architecture dependency validation
 
 ---
 
-## Supported Architectures
+## 🏗 Supported Architectures
 
 ### Layered Architecture
 
-```text
+```
 internal/
 ├── handler/
 ├── service/
@@ -87,7 +95,7 @@ internal/
 
 ### Hexagonal Architecture
 
-```text
+```
 internal/
 ├── domain/
 ├── application/
@@ -99,7 +107,7 @@ internal/
 
 ---
 
-## Installation
+## 📦 Installation
 
 ### Using Go Install
 
@@ -115,23 +123,26 @@ ginforge --help
 
 ---
 
-## Commands
+## 🛠 Commands
 
 ### Create Project
 
 ```bash
 ginforge new myapp --architecture layered
+ginforge new myapp --architecture hexagonal
+ginforge new
 ```
 
-```bash
-ginforge new myapp --architecture hexagonal
-```
+---
 
 ### Generate Module
 
 ```bash
 ginforge generate module user
+ginforge generate module
 ```
+
+---
 
 ### Discover Routes
 
@@ -139,42 +150,41 @@ ginforge generate module user
 ginforge routes
 ```
 
+---
+
 ### Export Routes
 
 ```bash
 ginforge routes --json
-```
-
-```bash
 ginforge routes --csv
-```
-
-```bash
 ginforge routes --md
 ```
+
+---
 
 ### Validate Project
 
 ```bash
 ginforge doctor
+ginforge doctor --strict
 ```
 
 ---
 
-## Doctor Validation Rules
+## 🧠 Doctor Validation Rules
 
 ### Layered Architecture
 
 Allowed:
 
-```text
+```
 handler -> service
 service -> repository
 ```
 
 Forbidden:
 
-```text
+```
 service -> handler
 repository -> service
 repository -> handler
@@ -182,11 +192,13 @@ model -> service
 model -> repository
 ```
 
+---
+
 ### Hexagonal Architecture
 
 Forbidden:
 
-```text
+```
 domain -> gin
 domain -> database/sql
 application -> adapters
@@ -194,46 +206,34 @@ application -> adapters
 
 ---
 
-## Example
-
-### Generate Project
+## 📊 Example Workflow
 
 ```bash
 ginforge new ecommerce-api --architecture layered
-```
 
-### Generate Module
+cd ecommerce-api
 
-```bash
-ginforge generate module product
-```
+ginforge generate module user
 
-### Discover Routes
-
-```bash
 ginforge routes
-```
 
-### Validate Architecture
-
-```bash
-ginforge doctor
+ginforge doctor --strict
 ```
 
 ---
 
-## Roadmap
+## 🗺 Roadmap
 
-* OpenAPI generation
-* Swagger generation
-* CI integration
-* Custom architecture templates
-* Plugin system
-* Resource generators
+- OpenAPI generation from routes
+- Swagger integration
+- CI pipeline integration
+- Custom architecture templates
+- Plugin system for custom checks
+- Doctor auto-fix suggestions
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome.
 
@@ -241,6 +241,6 @@ If you find a bug or have an idea for improvement, feel free to open an issue or
 
 ---
 
-## License
+## 📄 License
 
 MIT License
