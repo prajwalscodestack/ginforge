@@ -1,51 +1,52 @@
-/*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/prajwalscodestack/ginforge/internal/version"
 	"github.com/spf13/cobra"
 )
 
-
-
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without subcommands
 var rootCmd = &cobra.Command{
 	Use:   "ginforge",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Architecture-aware CLI toolkit for Gin applications",
+	Long: `GinForge is a developer-focused CLI tool for building, analyzing,
+and maintaining production-ready Gin applications.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+It provides:
+- Project scaffolding (layered & hexagonal architecture)
+- Module generation
+- Route discovery using Go AST
+- Architecture validation and project health checks
+
+Example usage:
+
+  ginforge new myapp --architecture layered
+  ginforge generate module user
+  ginforge routes
+  ginforge doctor --strict
+`,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// Execute runs the root command
 func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
+
+	// handle global --version flag
+	if v, _ := rootCmd.Flags().GetBool("version"); v {
+		fmt.Println("GinForge CLI")
+		fmt.Println("Version:", version.Version)
+		return
+	}
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
 	}
 }
-
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ginforge.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().
+		BoolP("version", "", false, "Show GinForge version")
+	// Remove useless default toggle flag (Cobra boilerplate cleanup)
 }
-
-
