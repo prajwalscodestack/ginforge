@@ -22,13 +22,13 @@ func (DependencyCheck) Run(
 	architecture :=
 		detectArchitecture(projectPath)
 
-	if architecture != "layered" {
+	if architecture == "" {
 
 		return Result{
 			Name:   "Dependency Rules",
 			Passed: true,
 			Messages: []string{
-				"Dependency validation skipped",
+				"Architecture unknown, dependency validation skipped",
 			},
 		}
 	}
@@ -51,23 +51,14 @@ func (DependencyCheck) Run(
 				return nil
 			}
 
-			if !strings.HasSuffix(
-				path,
-				".go",
-			) {
-				return nil
-			}
-
-			layer := detectLayer(path)
-
-			if layer == "" {
+			if !strings.HasSuffix(path, ".go") {
 				return nil
 			}
 
 			fileViolations, err :=
-				validateImports(
+				validateFileDependencies(
 					path,
-					layer,
+					architecture,
 				)
 
 			if err != nil {
@@ -112,6 +103,132 @@ func (DependencyCheck) Run(
 	}
 }
 
+func validateFileDependencies(
+	filePath string,
+	architecture string,
+) ([]string, error) {
+
+	var violations []string
+
+	fset := token.NewFileSet()
+
+	file, err := parser.ParseFile(
+		fset,
+		filePath,
+		nil,
+		parser.ImportsOnly,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	switch architecture {
+
+	case "layered":
+
+		layer := detectLayer(filePath)
+
+		for _, imp := range file.Imports {
+
+			importPath :=
+				strings.Trim(
+					imp.Path.Value,
+					"\"",
+				)
+
+			importedLayer :=
+				extractLayer(importPath)
+
+			if importedLayer == "" {
+				continue
+			}
+
+			if isForbiddenImport(
+				layer,
+				importedLayer,
+			) {
+
+				violations = append(
+					violations,
+					fmt.Sprintf(
+						"%s\n    %s layer must not import %s layer",
+						filePath,
+						layer,
+						importedLayer,
+					),
+				)
+			}
+		}
+
+	case "hexagonal":
+
+		for _, imp := range file.Imports {
+
+			importPath :=
+				strings.Trim(
+					imp.Path.Value,
+					"\"",
+				)
+
+			if strings.Contains(
+				filePath,
+				"/domain/",
+			) {
+
+				if strings.Contains(
+					importPath,
+					"github.com/gin-gonic/gin",
+				) {
+
+					violations = append(
+						violations,
+						fmt.Sprintf(
+							"%s\n    domain layer must not depend on gin",
+							filePath,
+						),
+					)
+				}
+
+				if strings.Contains(
+					importPath,
+					"database/sql",
+				) {
+
+					violations = append(
+						violations,
+						fmt.Sprintf(
+							"%s\n    domain layer must not depend on database/sql",
+							filePath,
+						),
+					)
+				}
+			}
+
+			if strings.Contains(
+				filePath,
+				"/application/",
+			) {
+
+				if strings.Contains(
+					importPath,
+					"/adapters",
+				) {
+
+					violations = append(
+						violations,
+						fmt.Sprintf(
+							"%s\n    application layer must not import adapters",
+							filePath,
+						),
+					)
+				}
+			}
+		}
+	}
+
+	return violations, nil
+}
+
 func detectLayer(path string) string {
 
 	switch {
@@ -130,59 +247,6 @@ func detectLayer(path string) string {
 	}
 
 	return ""
-}
-
-func validateImports(
-	filePath string,
-	layer string,
-) ([]string, error) {
-
-	var violations []string
-
-	fset := token.NewFileSet()
-
-	file, err := parser.ParseFile(
-		fset,
-		filePath,
-		nil,
-		parser.ImportsOnly,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, imp := range file.Imports {
-
-		importPath := strings.Trim(
-			imp.Path.Value,
-			"\"",
-		)
-
-		importedLayer :=
-			extractLayer(importPath)
-
-		if importedLayer == "" {
-			continue
-		}
-
-		if isForbiddenImport(
-			layer,
-			importedLayer,
-		) {
-
-			violations = append(
-				violations,
-				fmt.Sprintf(
-					"\n%s\n    %s layer must not import %s layer",
-					filePath,
-					layer,
-					importedLayer,
-				),
-			)
-		}
-	}
-
-	return violations, nil
 }
 
 func extractLayer(
