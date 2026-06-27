@@ -1,0 +1,18 @@
+package application
+
+import (
+	"{{ .ModulePath }}/internal/ports/outbound"
+)
+
+type {{ .EntityName }}Service struct {
+	repository outbound.{{ .EntityName }}Repository
+}
+
+func New{{ .EntityName }}Service(
+	repository outbound.{{ .EntityName }}Repository,
+) *{{ .EntityName }}Service {
+
+	return &{{ .EntityName }}Service{
+		repository: repository,
+	}
+}

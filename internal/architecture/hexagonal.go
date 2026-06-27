@@ -40,27 +40,39 @@ func (h Hexagonal) ModuleTemplates(
 	return []TemplateFile{
 		{
 			Template: "templates/hexagonal/module/domain.go.tmpl",
-			Output:   "internal/domain/" + moduleName + ".go",
+			Output: "internal/domain/" +
+				moduleName +
+				".go",
 		},
 		{
-			Template: "templates/hexagonal/module/service.go.tmpl",
-			Output:   "internal/application/" + moduleName + "_service.go",
+			Template: "templates/hexagonal/module/application.go.tmpl",
+			Output: "internal/application/" +
+				moduleName +
+				"_service.go",
 		},
 		{
 			Template: "templates/hexagonal/module/inbound.go.tmpl",
-			Output:   "internal/ports/inbound/" + moduleName + "_service.go",
+			Output: "internal/ports/inbound/" +
+				moduleName +
+				"_service.go",
 		},
 		{
 			Template: "templates/hexagonal/module/outbound.go.tmpl",
-			Output:   "internal/ports/outbound/" + moduleName + "_repository.go",
+			Output: "internal/ports/outbound/" +
+				moduleName +
+				"_repository.go",
 		},
 		{
 			Template: "templates/hexagonal/module/handler.go.tmpl",
-			Output:   "internal/adapters/http/" + moduleName + "_handler.go",
+			Output: "internal/adapters/http/" +
+				moduleName +
+				"_handler.go",
 		},
 		{
 			Template: "templates/hexagonal/module/repository.go.tmpl",
-			Output:   "internal/adapters/repository/" + moduleName + "_repository.go",
+			Output: "internal/adapters/repository/" +
+				moduleName +
+				"_repository.go",
 		},
 	}
 }

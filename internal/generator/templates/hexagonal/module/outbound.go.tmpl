@@ -1,0 +1,14 @@
+package outbound
+
+import "{{ .ModulePath }}/internal/domain"
+
+type {{ .EntityName }}Repository interface {
+
+	Create(
+		entity *domain.{{ .EntityName }},
+	) error
+
+	GetByID(
+		id string,
+	) (*domain.{{ .EntityName }}, error)
+}

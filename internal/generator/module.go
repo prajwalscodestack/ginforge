@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 
 	"github.com/prajwalscodestack/ginforge/internal/architecture"
+	"github.com/prajwalscodestack/ginforge/internal/config"
 )
 
 func GenerateModule(
@@ -12,10 +13,16 @@ func GenerateModule(
 	arch architecture.Architecture,
 ) error {
 
-	data := ModuleTemplateData{
-		ModuleName: moduleName,
+	modulePath, err := config.ModulePath(projectPath)
+	if err != nil {
+		return err
 	}
 
+	data := ModuleTemplateData{
+		ModuleName: moduleName,
+		EntityName: ToPascalCase(moduleName),
+		ModulePath: modulePath,
+	}
 	for _, file := range arch.ModuleTemplates(moduleName) {
 
 		if err := RenderTemplate(
