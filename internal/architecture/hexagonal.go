@@ -33,6 +33,34 @@ func (h Hexagonal) ProjectTemplates() []TemplateFile {
 		},
 	}
 }
-func (h Hexagonal) GenerateModule(projectPath, moduleName string) error {
-	return nil
+func (h Hexagonal) ModuleTemplates(
+	moduleName string,
+) []TemplateFile {
+
+	return []TemplateFile{
+		{
+			Template: "templates/hexagonal/module/domain.go.tmpl",
+			Output:   "internal/domain/" + moduleName + ".go",
+		},
+		{
+			Template: "templates/hexagonal/module/service.go.tmpl",
+			Output:   "internal/application/" + moduleName + "_service.go",
+		},
+		{
+			Template: "templates/hexagonal/module/inbound.go.tmpl",
+			Output:   "internal/ports/inbound/" + moduleName + "_service.go",
+		},
+		{
+			Template: "templates/hexagonal/module/outbound.go.tmpl",
+			Output:   "internal/ports/outbound/" + moduleName + "_repository.go",
+		},
+		{
+			Template: "templates/hexagonal/module/handler.go.tmpl",
+			Output:   "internal/adapters/http/" + moduleName + "_handler.go",
+		},
+		{
+			Template: "templates/hexagonal/module/repository.go.tmpl",
+			Output:   "internal/adapters/repository/" + moduleName + "_repository.go",
+		},
+	}
 }

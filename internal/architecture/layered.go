@@ -28,6 +28,30 @@ func (l Layered) ProjectTemplates() []TemplateFile {
 		},
 	}
 }
-func (l Layered) GenerateModule(projectPath, moduleName string) error {
-	return nil
+func (l Layered) ModuleTemplates(
+	moduleName string,
+) []TemplateFile {
+
+	return []TemplateFile{
+		{
+			Template: "templates/layered/module/handler.go.tmpl",
+			Output:   "internal/handler/" + moduleName + ".go",
+		},
+		{
+			Template: "templates/layered/module/service.go.tmpl",
+			Output:   "internal/service/" + moduleName + ".go",
+		},
+		{
+			Template: "templates/layered/module/repository.go.tmpl",
+			Output:   "internal/repository/" + moduleName + ".go",
+		},
+		{
+			Template: "templates/layered/module/model.go.tmpl",
+			Output:   "internal/model/" + moduleName + ".go",
+		},
+		{
+			Template: "templates/layered/module/routes.go.tmpl",
+			Output:   "internal/routes/" + moduleName + ".go",
+		},
+	}
 }

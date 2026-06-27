@@ -7,8 +7,5 @@ type Architecture interface {
 
 	ProjectTemplates() []TemplateFile
 
-	GenerateModule(
-		projectPath,
-		moduleName string,
-	) error
+	ModuleTemplates(moduleName string) []TemplateFile
 }

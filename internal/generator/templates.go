@@ -14,6 +14,9 @@ type ProjectTemplateData struct {
 	Architecture string
 	ModuleName   string
 }
+type ModuleTemplateData struct {
+	ModuleName string
+}
 
 func RenderTemplate(
 	templatePath string,
