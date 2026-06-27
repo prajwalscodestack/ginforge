@@ -1,7 +1,7 @@
 package doctor
 
 type Result struct {
-	Name    string
-	Passed  bool
-	Message string
+	Name     string
+	Passed   bool
+	Messages []string
 }

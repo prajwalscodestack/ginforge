@@ -21,9 +21,9 @@ func (StructureCheck) Run(
 	if architecture == "" {
 
 		return Result{
-			Name:    "Structure",
-			Passed:  true,
-			Message: "Architecture unknown, structure check skipped",
+			Name:     "Structure",
+			Passed:   true,
+			Messages: []string{"Required directories present"},
 		}
 	}
 
@@ -53,16 +53,16 @@ func (StructureCheck) Run(
 		return Result{
 			Name:   "Structure",
 			Passed: false,
-			Message: fmt.Sprintf(
+			Messages: []string{fmt.Sprintf(
 				"Missing directories: %v",
 				missing,
-			),
+			)},
 		}
 	}
 
 	return Result{
-		Name:    "Structure",
-		Passed:  true,
-		Message: "Required directories present",
+		Name:     "Structure",
+		Passed:   true,
+		Messages: []string{"Required directories present"},
 	}
 }

@@ -17,18 +17,18 @@ func (ArchitectureCheck) Run(
 	if architecture == "" {
 
 		return Result{
-			Name:    "Architecture",
-			Passed:  true,
-			Message: "Standard Gin project detected",
+			Name:     "Architecture",
+			Passed:   true,
+			Messages: []string{"Standard Gin project detected"},
 		}
 	}
 
 	return Result{
 		Name:   "Architecture",
 		Passed: true,
-		Message: fmt.Sprintf(
+		Messages: []string{fmt.Sprintf(
 			"GinForge project detected (%s)",
 			architecture,
-		),
+		)},
 	}
 }

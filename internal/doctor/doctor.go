@@ -6,6 +6,7 @@ func Run(projectPath string) []Result {
 		ArchitectureCheck{},
 		StructureCheck{},
 		DuplicateRouteCheck{},
+		DependencyCheck{},
 	}
 
 	var results []Result

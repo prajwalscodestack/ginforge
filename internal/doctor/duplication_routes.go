@@ -22,9 +22,9 @@ func (DuplicateRouteCheck) Run(
 	if err != nil {
 
 		return Result{
-			Name:    "Duplicate Routes",
-			Passed:  false,
-			Message: err.Error(),
+			Name:     "Duplicate Routes",
+			Passed:   false,
+			Messages: []string{err.Error()},
 		}
 	}
 
@@ -49,17 +49,17 @@ func (DuplicateRouteCheck) Run(
 			return Result{
 				Name:   "Duplicate Routes",
 				Passed: false,
-				Message: fmt.Sprintf(
+				Messages: []string{fmt.Sprintf(
 					"Duplicate route found (%s)",
 					key,
-				),
+				)},
 			}
 		}
 	}
 
 	return Result{
-		Name:    "Duplicate Routes",
-		Passed:  true,
-		Message: "No duplicate routes found",
+		Name:     "Duplicate Routes",
+		Passed:   true,
+		Messages: []string{"No duplicate routes found"},
 	}
 }

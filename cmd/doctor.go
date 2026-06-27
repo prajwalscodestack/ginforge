@@ -43,10 +43,15 @@ var doctorCmd = &cobra.Command{
 				)
 			}
 
-			fmt.Printf(
-				"  %s\n\n",
-				result.Message,
-			)
+			for _, message := range result.Messages {
+
+				fmt.Printf(
+					"  %s\n",
+					message,
+				)
+			}
+
+			fmt.Println()
 		}
 
 		if hasFailures {
