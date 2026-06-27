@@ -1,73 +1,74 @@
 # GinForge
 
-GinForge is a developer-focused CLI tool for bootstrapping, scaffolding, and analyzing production-ready applications built with the Gin framework.
+GinForge is an architecture-aware CLI toolkit for building, analyzing, and maintaining production-ready applications built with the Gin framework.
 
-Instead of manually creating folders, modules, and architectural boilerplate, GinForge generates structured project layouts based on popular backend architecture patterns and provides developer tooling for route discovery and project analysis.
+Instead of manually creating project structures, modules, and architectural boilerplate, GinForge provides project scaffolding, module generation, route discovery, and architecture validation for Gin applications.
 
 ---
 
 ## Features
 
-### Project Generation
+### Project Scaffolding
 
-* Generate new Gin projects
-* Layered Architecture support
-* Hexagonal Architecture support
-* Architecture-aware project metadata
+Generate production-ready Gin projects using popular architecture patterns.
+
+```bash
+ginforge new myapp --architecture layered
+```
+
+```bash
+ginforge new myapp --architecture hexagonal
+```
 
 ### Module Generation
 
-* Generate modules within existing projects
-* Architecture-specific module scaffolding
-* Automatic architecture detection
-* Module path resolution from `go.mod`
-
-### Route Scanner
-
-* Discover Gin routes across the project
-* Support for route groups
-* Support for nested route groups
-* Extract handler names
-* Detect inline route handlers
-* Display source file information
-
-### Export Formats
-
-* Table output
-* JSON output
-* CSV output
-* Markdown output
-
-### Developer Experience
-
-* Template-driven code generation
-* Extensible architecture system
-* Consistent project structure
-* CLI-first workflow
-
----
-
-## Installation
+Generate modules with architecture-specific boilerplate.
 
 ```bash
-go install github.com/prajwalscodestack/ginforge@latest
+ginforge generate module user
 ```
 
----
+### Route Discovery
 
-## Create a New Project
-
-### Layered Architecture
+Analyze Gin applications and discover routes automatically using Go AST.
 
 ```bash
-ginforge new bookstore -a layered
+ginforge routes
 ```
 
-### Hexagonal Architecture
+Supports:
+
+* Route groups
+* Nested route groups
+* Named handlers
+* Method handlers
+* Inline handlers
+
+### Route Export
+
+Export discovered routes in multiple formats.
 
 ```bash
-ginforge new bookstore -a hexagonal
+ginforge routes --json
+ginforge routes --csv
+ginforge routes --md
 ```
+
+### Architecture Validation
+
+Validate project structure and architecture rules.
+
+```bash
+ginforge doctor
+```
+
+Checks include:
+
+* Architecture detection
+* Structure validation
+* Duplicate route detection
+* Layered architecture dependency validation
+* Hexagonal architecture dependency validation
 
 ---
 
@@ -90,98 +91,156 @@ internal/
 internal/
 ├── domain/
 ├── application/
-│   ├── ports/
-│   └── services/
 └── adapters/
     ├── http/
-    └── persistence/
+    ├── persistence/
+    └── external/
 ```
 
 ---
 
-## Generate a Module
+## Installation
+
+### Using Go Install
+
+```bash
+go install github.com/prajwalscodestack/ginforge@latest
+```
+
+### Verify Installation
+
+```bash
+ginforge --help
+```
+
+---
+
+## Commands
+
+### Create Project
+
+```bash
+ginforge new myapp --architecture layered
+```
+
+```bash
+ginforge new myapp --architecture hexagonal
+```
+
+### Generate Module
 
 ```bash
 ginforge generate module user
 ```
 
-GinForge automatically detects the project architecture and generates the appropriate module structure.
-
----
-
-## Route Scanner
-
-List all routes in the current project:
+### Discover Routes
 
 ```bash
 ginforge routes
 ```
 
-Example output:
-
-```text
-METHOD   PATH                             HANDLER         FILE
-GET      /health                          HealthHandler  internal/routes/health.go
-GET      /api/v1/users                    GetUsers       internal/routes/user.go
-POST     /api/v1/users                    CreateUser     internal/routes/user.go
-```
-
----
-
-## Export Routes as JSON
+### Export Routes
 
 ```bash
 ginforge routes --json
 ```
 
-Example:
-
-```json
-[
-  {
-    "method": "GET",
-    "path": "/users",
-    "handler": "GetUsers"
-  }
-]
-```
-
----
-
-## Export Routes as CSV
-
 ```bash
 ginforge routes --csv
 ```
 
----
-
-## Export Routes as Markdown
-
 ```bash
 ginforge routes --md
+```
+
+### Validate Project
+
+```bash
+ginforge doctor
+```
+
+---
+
+## Doctor Validation Rules
+
+### Layered Architecture
+
+Allowed:
+
+```text
+handler -> service
+service -> repository
+```
+
+Forbidden:
+
+```text
+service -> handler
+repository -> service
+repository -> handler
+model -> service
+model -> repository
+```
+
+### Hexagonal Architecture
+
+Forbidden:
+
+```text
+domain -> gin
+domain -> database/sql
+application -> adapters
+```
+
+---
+
+## Example
+
+### Generate Project
+
+```bash
+ginforge new ecommerce-api --architecture layered
+```
+
+### Generate Module
+
+```bash
+ginforge generate module product
+```
+
+### Discover Routes
+
+```bash
+ginforge routes
+```
+
+### Validate Architecture
+
+```bash
+ginforge doctor
 ```
 
 ---
 
 ## Roadmap
 
-* Architecture validation (`ginforge doctor`)
 * OpenAPI generation
-* Resource generation
-* Plugin system
+* Swagger generation
+* CI integration
 * Custom architecture templates
+* Plugin system
+* Resource generators
 
 ---
 
-## Why GinForge?
+## Contributing
 
-GinForge aims to go beyond project generation by providing architecture-aware tooling for Gin applications.
+Contributions, issues, and feature requests are welcome.
 
-The goal is to help developers:
+If you find a bug or have an idea for improvement, feel free to open an issue or submit a pull request.
 
-* Start faster
-* Maintain consistent project structure
-* Discover and document routes
-* Enforce architectural conventions
-* Scale Gin applications more confidently
+---
+
+## License
+
+MIT License
