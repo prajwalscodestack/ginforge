@@ -27,9 +27,7 @@ func ParseFile(path string) ([]Route, error) {
 
 	ast.Inspect(file, func(n ast.Node) bool {
 
-		// Detect:
-		// api := router.Group("/api")
-		// v1 := api.Group("/v1")
+		// Detect groups
 		assignStmt, ok := n.(*ast.AssignStmt)
 
 		if ok {
@@ -82,9 +80,6 @@ func ParseFile(path string) ([]Route, error) {
 
 			fullPrefix := prefix
 
-			// Handle nested groups:
-			// api := router.Group("/api")
-			// v1 := api.Group("/v1")
 			receiver, ok :=
 				selectorExpr.X.(*ast.Ident)
 
@@ -138,6 +133,24 @@ func ParseFile(path string) ([]Route, error) {
 			"\"",
 		)
 
+		handlerName := ""
+
+		if len(callExpr.Args) > 1 {
+
+			switch h := callExpr.Args[1].(type) {
+
+			case *ast.Ident:
+				handlerName = h.Name
+
+			case *ast.SelectorExpr:
+				handlerName = h.Sel.Name
+
+			case *ast.FuncLit:
+				handlerName = "inline-func"
+
+			}
+		}
+
 		receiver, ok :=
 			selectorExpr.X.(*ast.Ident)
 
@@ -152,9 +165,10 @@ func ParseFile(path string) ([]Route, error) {
 		}
 
 		routes = append(routes, Route{
-			Method: method,
-			Path:   pathValue,
-			File:   path,
+			Method:  method,
+			Path:    pathValue,
+			File:    path,
+			Handler: handlerName,
 		})
 
 		return true

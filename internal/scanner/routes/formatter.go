@@ -9,14 +9,22 @@ import (
 
 func PrintTable(routes []Route) {
 
-	fmt.Printf("%-8s %s\n", "METHOD", "PATH")
+	fmt.Printf(
+		"%-8s %-35s %-20s %s\n",
+		"METHOD",
+		"PATH",
+		"HANDLER",
+		"FILE",
+	)
 
 	for _, route := range routes {
 
 		fmt.Printf(
-			"%-8s %s\n",
+			"%-8s %-35s %-20s %s\n",
 			route.Method,
 			route.Path,
+			route.Handler,
+			route.File,
 		)
 	}
 }
@@ -45,6 +53,8 @@ func PrintCSV(routes []Route) error {
 		[]string{
 			"METHOD",
 			"PATH",
+			"HANDLER",
+			"FILE",
 		},
 	); err != nil {
 		return err
@@ -56,6 +66,8 @@ func PrintCSV(routes []Route) error {
 			[]string{
 				route.Method,
 				route.Path,
+				route.Handler,
+				route.File,
 			},
 		); err != nil {
 			return err
@@ -69,15 +81,17 @@ func PrintCSV(routes []Route) error {
 
 func PrintMarkdown(routes []Route) {
 
-	fmt.Println("| Method | Path |")
-	fmt.Println("|--------|------|")
+	fmt.Println("| Method | Path | Handler | File |")
+	fmt.Println("|--------|------|---------|------|")
 
 	for _, route := range routes {
 
 		fmt.Printf(
-			"| %s | %s |\n",
+			"| %s | %s | %s | %s |\n",
 			route.Method,
 			route.Path,
+			route.Handler,
+			route.File,
 		)
 	}
 }
