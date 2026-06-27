@@ -3,7 +3,7 @@ package generator
 import (
 	"path/filepath"
 
-	"ginforge/internal/architecture"
+	"github.com/prajwalscodestack/ginforge/internal/architecture"
 )
 
 func GenerateModule(

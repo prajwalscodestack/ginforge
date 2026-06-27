@@ -3,8 +3,8 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"ginforge/internal/architecture"
-	"ginforge/internal/generator"
+	"github.com/prajwalscodestack/ginforge/internal/architecture"
+	"github.com/prajwalscodestack/ginforge/internal/generator"
 )
 
 var architectureType string

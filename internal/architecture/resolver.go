@@ -1,7 +1,7 @@
 package architecture
 
 import (
-	"ginforge/internal/config"
+	"github.com/prajwalscodestack/ginforge/internal/config"
 )
 
 func ResolveFromProject(

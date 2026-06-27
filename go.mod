@@ -1,4 +1,4 @@
-module ginforge
+module github.com/prajwalscodestack/ginforge
 
 go 1.26.4
 

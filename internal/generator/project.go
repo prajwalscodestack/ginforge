@@ -3,8 +3,8 @@ package generator
 import (
 	"path/filepath"
 
-	"ginforge/internal/architecture"
-	"ginforge/internal/config"
+	"github.com/prajwalscodestack/ginforge/internal/architecture"
+	"github.com/prajwalscodestack/ginforge/internal/config"
 )
 
 func GenerateProject(
